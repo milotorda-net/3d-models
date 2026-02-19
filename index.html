@@ -5,27 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
   <style>
-    body { margin: 0; overflow: hidden; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
     model-viewer {
-      width: 100vw;
-      height: 100vh;
-      background-color: transparent;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background-color: #e8e8e8;
     }
   </style>
 </head>
 <body>
   <model-viewer
+    id="viewer"
     src="./framework_3.glb"
     alt="3D crystal structure"
     auto-rotate
     camera-controls
-    shadow-intensity="1"
     environment-image="neutral"
-    exposure="1.5"
+    shadow-intensity="1"
+    exposure="2"
     camera-orbit="45deg 55deg 105%"
-    camera-target="auto auto auto"
-    style="width:100%; height:100%; background-color: #f0f0f0;">
-    <div slot="progress-bar"></div>
+    camera-target="auto auto auto">
   </model-viewer>
+  <script>
+    const viewer = document.getElementById('viewer');
+    viewer.addEventListener('error', (e) => {
+      console.error('Model viewer error:', e.detail);
+      document.body.innerHTML = '<p style="padding:2em;font-family:sans-serif;">Error loading 3D model: ' + (e.detail?.type || 'unknown') + '</p>';
+    });
+    viewer.addEventListener('load', () => {
+      console.log('Model loaded successfully');
+      viewer.updateFraming();
+    });
+  </script>
 </body>
 </html>
